@@ -1,0 +1,94 @@
+/* =========================================================
+   MRO Planner — Missions page (בונה על גבי theme.css)
+   ========================================================= */
+
+#missionsTable { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.9rem; }
+#missionsTable th, #missionsTable td { padding: 1.1rem 1.25rem; border-bottom: 1px dashed var(--line-soft); vertical-align: middle; }
+#missionsTable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+#missionsTable tbody tr:hover { background: var(--brand-blue-light); }
+#missionsTable tbody tr { cursor: pointer; }
+#missionsTable td.col-desc { max-width: 280px; word-break: break-word; }
+
+/* --- פאנל פתיחת/עריכת קריאה - בכוונה "טיפה שונה" מדף התקלות (טורקיז, לא כחול) --- */
+.mission-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.75rem;
+    margin-bottom: 1.25rem;
+}
+.mission-creator-tag {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+}
+.mission-creator-tag strong { color: var(--ink); }
+
+.btn-mission-toggle {
+    background: var(--accent-teal);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.3rem;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+}
+.btn-mission-toggle:hover { background: #0d9488; }
+.btn-mission-toggle:active { transform: scale(0.97); }
+
+.mission-panel {
+    background: #f0fdfa;
+    border: 1px solid #99f6e4;
+    border-radius: var(--radius-md);
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 1.75rem;
+    animation: slideDown 0.2s ease-in-out;
+}
+.mission-panel-header {
+    background: var(--accent-teal);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mission-panel-header h2 { color: #fff; border: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 1.1rem; letter-spacing: normal; text-transform: none; }
+.mission-panel-close { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+.mission-panel-close:hover { background: rgba(255,255,255,0.3); }
+
+.mission-panel form { padding: 1.5rem; }
+.mission-panel .form-group input,
+.mission-panel .form-group select,
+.mission-panel .form-group textarea {
+    border-color: #99f6e4;
+}
+.mission-panel .form-group input:focus,
+.mission-panel .form-group select:focus,
+.mission-panel .form-group textarea:focus {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+}
+
+.btn-mission-submit {
+    background: var(--accent-teal);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.4rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.btn-mission-submit:hover { background: #0d9488; }

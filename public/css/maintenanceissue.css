@@ -1,0 +1,668 @@
+/* =========================================================
+   MRO Planner — Maintenance Issue "Boarding Pass" theme
+   ========================================================= */
+:root {
+    --brand-blue: #1758c9;
+    --brand-blue-dark: #0e3f95;
+    --brand-blue-light: #eaf1fd;
+    --accent-teal: #14b8a6;
+    --ink: #10192b;
+    --ink-soft: #55607a;
+    --paper: #fbf9f4;
+    --paper-card: #ffffff;
+    --paper-stub: #f6f4ee;
+    --line: #ddd6c6;
+    --line-soft: #e8e3d6;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --amber: #d97706;
+    --green: #15803d;
+    --radius-sm: 8px;
+    --radius-md: 18px;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --sans: 'Assistant', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+    --shadow-ticket: 0 20px 45px -20px rgba(16, 25, 43, 0.28), 0 4px 12px -4px rgba(16, 25, 43, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--sans);
+    background: var(--paper);
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(23, 88, 201, 0.05), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(20, 184, 166, 0.06), transparent 45%);
+    color: var(--ink);
+    line-height: 1.5;
+    padding: 2.5rem 1rem 4rem;
+}
+
+/* --- The ticket / boarding pass shell --- */
+.container {
+    position: relative;
+    max-width: 980px;
+    margin: 0 auto;
+    background: var(--paper-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-ticket);
+    overflow: hidden;
+    border: 1px solid var(--line-soft);
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
+
+@media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* --- Ticket header strip (brand + flight-style title) --- */
+.form-header {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+    color: #fff;
+    padding: 1.75rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    position: relative;
+}
+
+.form-header .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 0.5rem;
+}
+
+.form-header .brand-row img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+
+h1 { font-size: 1.55rem; font-weight: 700; }
+.subtitle { color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-top: 0.15rem; }
+
+.form-header .ticket-code {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    white-space: nowrap;
+    align-self: flex-start;
+}
+
+/* קישור "לדף הבית" - ניגודיות גבוהה בכוונה, כי על רקע כחול טקסט לבן-על-שקוף כמעט לא נראה */
+.header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.6rem;
+}
+.btn-home {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--brand-blue-dark);
+    background: #fff;
+    border: 1px solid #fff;
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+}
+.btn-home:hover { background: var(--brand-blue-light); }
+.btn-home:active { transform: scale(0.97); }
+
+form#issueForm { padding: 0 2.5rem 2.5rem; }
+
+@media (max-width: 768px) {
+    .form-header { padding: 1.25rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    form#issueForm { padding: 0 1.25rem 1.75rem; }
+}
+
+/* --- Perforated divider between "stub" sections --- */
+.perforation {
+    position: relative;
+    height: 0;
+    border-top: 2px dashed var(--line);
+    margin: 0 -2.5rem 2rem;
+}
+.perforation::before, .perforation::after {
+    content: '';
+    position: absolute;
+    top: -11px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+.perforation::before { left: -11px; }
+.perforation::after { right: -11px; }
+
+@media (max-width: 768px) {
+    .perforation { margin-inline: -1.25rem; }
+}
+
+/* --- Section headings --- */
+.form-section { margin-bottom: 2rem; padding-top: 1.75rem; }
+.form-section:first-of-type { padding-top: 2rem; }
+
+h2 {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--brand-blue);
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-header-inline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line-soft);
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.6rem;
+}
+.section-header-inline h2 { border: none; margin: 0; padding: 0; }
+
+/* --- Form elements --- */
+.form-group { margin-bottom: 1.25rem; }
+label, .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: 0.87rem;
+    color: var(--ink-soft);
+}
+.required { color: var(--danger); font-weight: bold; }
+
+input[type="text"],
+input[type="datetime-local"],
+select,
+textarea,
+.form-control {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    background-color: #fff;
+    color: var(--ink);
+    font-family: var(--sans);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus, select:focus, textarea:focus, .form-control:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 3px rgba(23, 88, 201, 0.15);
+}
+
+textarea { resize: vertical; min-height: 80px; }
+
+/* the visit-picker acts like the "flight number" field: bigger + monospace */
+#activeVisitsSelect {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 0.85rem 1rem;
+    border: 2px solid var(--brand-blue-light);
+    background: var(--brand-blue-light);
+    color: var(--brand-blue-dark);
+}
+#activeVisitsSelect:focus { border-color: var(--brand-blue); }
+
+/* --- Visit info strip (populated once a visit is chosen) --- */
+.visit-card {
+    display: none;
+    background: var(--paper-stub);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+    margin: -0.4rem 0 1.5rem;
+}
+.visit-card .visit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.9rem 1.5rem;
+}
+.visit-field .visit-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin-bottom: 0.15rem;
+}
+.visit-field .visit-value {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+}
+
+/* --- Category / department info callouts --- */
+.category-desc-box {
+    margin-top: 0.6rem;
+    padding: 0.6rem 0.85rem;
+    background-color: var(--brand-blue-light);
+    border-right: 3px solid var(--brand-blue);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    color: var(--brand-blue-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideDown 0.2s ease-in-out;
+}
+.category-desc-box .info-icon { font-size: 1rem; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Action "stubs" (torn-ticket coupon look) --- */
+.action-card {
+    position: relative;
+    background: var(--paper-stub);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1.4rem;
+    animation: fadeIn 0.2s ease-in-out;
+}
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; right: 0;
+    width: 6px;
+    background: repeating-linear-gradient(180deg, var(--accent-teal) 0 8px, transparent 8px 14px);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.action-stub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed var(--line);
+}
+.action-stub-header .stub-index {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--brand-blue-dark);
+}
+
+.serial-section, .serial-fields {
+    margin-top: 1rem;
+    background: #fff;
+    border: 1px dashed var(--line);
+    padding: 0.9rem;
+    border-radius: var(--radius-sm);
+}
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.checkbox-label input[type="checkbox"] { width: 1.1rem; height: 1.1rem; cursor: pointer; }
+
+.employee-tag {
+    font-weight: 600;
+    margin-right: 8px;
+    font-size: 0.85rem;
+}
+
+/* --- Attachments (documents / stamps) --- */
+.attachments-zone {
+    background: var(--paper-stub);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+}
+.attachments-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+}
+.attachment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.35rem 0.5rem 0.35rem 0.9rem;
+    font-size: 0.83rem;
+    font-family: var(--mono);
+}
+.attachment-chip .remove-chip {
+    background: var(--danger);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.7rem;
+}
+.attachments-empty { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.7rem; }
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.3rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+    font-family: var(--sans);
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-primary { background-color: var(--ink); color: #fff; }
+.btn-primary:hover { background-color: #26324a; }
+
+.btn-secondary { background-color: var(--brand-blue); color: #fff; }
+.btn-secondary:hover { background-color: var(--brand-blue-dark); }
+
+.btn-outline { background-color: #fff; color: var(--ink); border: 1px solid var(--line); }
+.btn-outline:hover { background-color: var(--paper-stub); border-color: var(--ink-soft); }
+
+.btn-danger, .btn-danger.btn-sm { background-color: var(--danger); color: white; padding: 0.4rem 0.8rem; font-size: 0.82rem; }
+.btn-danger:hover { background-color: var(--danger-hover); }
+
+.btn-large { width: 100%; padding: 1rem; font-size: 1.05rem; margin-top: 0.5rem; }
+
+.form-actions { padding-top: 0.5rem; }
+
+/* =========================================================
+   Manage Issues page — reuses the same boarding-pass system
+   ========================================================= */
+
+/* עמוד רחב יותר (לטבלה) מאשר טופס פתיחת תקלה */
+.page-shell { max-width: 1280px; }
+.page-shell form#issueForm { padding: 0; } /* לא רלוונטי בעמוד הזה, ליתר ביטחון */
+
+.page-shell .page-body { padding: 0 2.5rem 2.5rem; }
+@media (max-width: 768px) {
+    .page-shell .page-body { padding: 0 1.25rem 1.75rem; }
+}
+
+/* --- שורת סטטיסטיקה קצרה מעל הטבלה --- */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 1.75rem 0 1.5rem;
+}
+.stat-chip {
+    background: var(--paper-stub);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1.1rem;
+    text-align: center;
+}
+.stat-chip .stat-value {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--brand-blue-dark);
+    display: block;
+}
+.stat-chip.stat-critical .stat-value { color: var(--danger); }
+.stat-chip.stat-unassigned .stat-value { color: var(--amber); }
+.stat-chip .stat-label {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.2rem;
+}
+
+/* --- סרגל בחירת ביקור / סינון, בסגנון "לוח יציאות" --- */
+.filter-card {
+    background: var(--brand-blue-light);
+    border: 1px dashed var(--brand-blue);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+.filter-group { display: flex; flex-direction: column; gap: 0.35rem; flex: 1; min-width: 220px; }
+.filter-group label {
+    color: var(--brand-blue-dark);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.filter-group.highlight select {
+    font-family: var(--mono);
+    font-weight: 700;
+    border: 2px solid var(--brand-blue);
+}
+
+/* --- טבלת התקלות בסגנון "מניפסט טיסה" --- */
+.table-container {
+    background: var(--paper-card);
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+    border: 1px solid var(--line-soft);
+}
+#issuesTable { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.9rem; }
+#issuesTable th, #issuesTable td { padding: 1.1rem 1.25rem; border-bottom: 1px dashed var(--line-soft); vertical-align: middle; }
+#issuesTable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+#issuesTable th > span.th-label { display: block; margin-bottom: 0.4rem; }
+#issuesTable tbody tr:hover { background: var(--brand-blue-light); }
+#issuesTable td.col-title { max-width: 260px; word-break: break-word; }
+.table-header-filter {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 5px 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 4px;
+    font-size: 0.74rem;
+    text-transform: none;
+    letter-spacing: normal;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+.table-header-filter option { color: #000; }
+
+.placeholder-text { color: var(--ink-soft); padding: 2rem 0 !important; }
+
+/* --- תגיות סטטוס/חומרה/דחיפות --- */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    background: var(--paper-stub);
+    color: var(--ink-soft);
+}
+.badge.status-1 { background: var(--brand-blue-light); color: var(--brand-blue-dark); }
+.badge.status-2 { background: #fef3c7; color: #92400e; }
+.badge.status-3, .badge.status-5 { background: #dcfce7; color: var(--green); }
+.badge.severity-3, .badge.priority-3 { background: #fee2e2; color: var(--danger); }
+
+.btn-edit {
+    background: var(--brand-blue);
+    color: #fff;
+    border: none;
+    padding: 0.45rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+.btn-edit:hover { background: var(--brand-blue-dark); }
+
+/* --- Modal עריכה - מדמה את דף פתיחת התקלה --- */
+.modal {
+    position: fixed; inset: 0;
+    background: rgba(16, 25, 43, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+}
+.modal-content {
+    background: var(--paper-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-ticket);
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--line-soft);
+}
+.modal-header {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+    color: #fff;
+    padding: 1.4rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header h2 { font-size: 1.25rem; color: #fff; }
+.modal-header .close-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+.modal-header .close-btn:hover { background: rgba(255,255,255,0.28); }
+
+#editForm { padding: 1.75rem 2rem 2rem; }
+@media (max-width: 640px) { #editForm { padding: 1.25rem 1.25rem 1.5rem; } .modal-header { padding: 1.1rem 1.25rem; } }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-top: 0.25rem; }
+.full-width { grid-column: span 2; }
+@media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
+
+.divider { border: none; border-top: 2px dashed var(--line); margin: 1.75rem 0; }
+
+/* כרטיסי הפעולות בתוך ה-Modal - זהה חזותית ל-.action-card בטופס פתיחת תקלה */
+.action-card-item {
+    position: relative;
+    background: var(--paper-stub);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+}
+.action-card-item::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; right: 0;
+    width: 6px;
+    background: repeating-linear-gradient(180deg, var(--accent-teal) 0 8px, transparent 8px 14px);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--line-soft);
+}
+.btn-save { background: var(--ink); color: #fff; border: none; padding: 0.65rem 1.4rem; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; }
+.btn-save:hover { background: #26324a; }
+.btn-cancel { background: #fff; color: var(--ink); border: 1px solid var(--line); padding: 0.65rem 1.4rem; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; }
+.btn-cancel:hover { background: var(--paper-stub); }
+
+.dept-donuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+.dept-donut-card {
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-align: center;
+}
+.dept-donut-card h3 {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--brand-blue-dark);
+    margin-bottom: 0.75rem;
+}
+.dept-donut-card canvas { max-height: 200px; }
+
+/* --- שורת סיכום סטטוסים: כללי + לפי מחלקה, זה לצד זה --- */
+.status-summary-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.75rem;
+}
+.status-summary-overall {
+    flex: 0 0 300px;
+}
+.status-summary-divider {
+    align-self: stretch;
+    width: 1px;
+    background: var(--line-soft);
+}
+.status-summary-departments {
+    flex: 1;
+    min-width: 0;
+}
+@media (max-width: 860px) {
+    .status-summary-row { flex-direction: column; }
+    .status-summary-overall { flex-basis: auto; width: 100%; }
+    .status-summary-divider { display: none; }
+}
+
+/* --- Utilities --- */
+.hidden { display: none !important; }

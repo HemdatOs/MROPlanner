@@ -1,0 +1,115 @@
+/* =========================================================
+   MRO Planner — Reports page (בונה על גבי theme.css)
+   ========================================================= */
+
+.report-type-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+.report-type-card {
+    background: var(--paper-stub);
+    border: 2px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    font-family: var(--sans);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.report-type-card:hover { border-color: var(--brand-blue); }
+.report-type-card.active {
+    border-color: var(--brand-blue);
+    background: var(--brand-blue-light);
+}
+.report-type-card .report-icon { font-size: 1.8rem; }
+.report-type-card .report-title { font-weight: 700; color: var(--ink); }
+.report-type-card .report-desc { font-size: 0.8rem; color: var(--ink-soft); }
+
+.column-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+.column-picker label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--paper-stub);
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.column-picker input[type="checkbox"] { width: auto; }
+.column-picker label:has(input:checked) {
+    background: var(--brand-blue-light);
+    border-color: var(--brand-blue);
+    color: var(--brand-blue-dark);
+}
+
+#reportPreviewTable { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem; }
+#reportPreviewTable th, #reportPreviewTable td { padding: 0.75rem 1rem; border-bottom: 1px dashed var(--line-soft); white-space: nowrap; }
+#reportPreviewTable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.74rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+}
+#reportPreviewTable tbody tr:hover { background: var(--brand-blue-light); }
+
+/* --- תצוגה מקוננת: תקלות + פעולות תחתן --- */
+.nested-issues-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+.nested-issue-card {
+    background: var(--paper-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+}
+.nested-issue-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+.nested-issue-number { font-family: var(--mono); font-weight: 700; color: var(--brand-blue-dark); }
+.nested-issue-title { font-weight: 700; flex: 1; }
+.nested-issue-meta { font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 0.85rem; }
+
+.nested-actions-list {
+    border-top: 1px dashed var(--line-soft);
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.nested-action-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    background: var(--paper-stub);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.8rem;
+}
+.nested-action-index { font-family: var(--mono); font-weight: 700; color: var(--ink-soft); }
+.nested-action-desc { flex: 1; min-width: 160px; }
+.nested-action-meta { font-size: 0.76rem; color: var(--ink-soft); }
+

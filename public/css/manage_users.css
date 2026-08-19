@@ -1,0 +1,57 @@
+/* =========================================================
+   MRO Planner — Manage Users page (בונה על גבי theme.css)
+   ========================================================= */
+
+.visits-toolbar {
+    margin-top: 1.75rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.visit-edit-panel {
+    background: var(--brand-blue-light);
+    border: 1px solid var(--brand-blue);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-top: 1.75rem;
+}
+.visit-edit-header {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.visit-edit-header h2 { color: #fff; border: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 1.1rem; letter-spacing: normal; text-transform: none; }
+.visit-edit-close { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+.visit-edit-close:hover { background: rgba(255,255,255,0.3); }
+.visit-edit-panel form { padding: 1.5rem; }
+
+.temp-password-display {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: #fff;
+    border: 2px dashed var(--brand-blue);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin: 0.75rem 0;
+}
+.chart-note { font-size: 0.8rem; color: var(--ink-soft); }
+
+#usersTable { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.88rem; }
+#usersTable th, #usersTable td { padding: 0.9rem 1rem; border-bottom: 1px dashed var(--line-soft); }
+#usersTable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.badge.pass-ok { background: #dcfce7; color: #15803d; }
+.badge.pass-temp { background: #fef3c7; color: #92400e; }

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קריאות אחזקה כלליות - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/missions.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>קריאות אחזקה כלליות</h1>
+            <p class="subtitle">פתיחת קריאה לגורם תומך (הנדסה, IT, איכות...) שלא תלויה במטוס ספציפי</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <!-- שורת פתיחה: מי מחובר + כפתור פתיחת טופס -->
+        <div class="mission-toolbar">
+            <span class="mission-creator-tag">נפתח ע"י: <strong id="missionCreatorDisplay">—</strong></span>
+            <button type="button" class="btn-mission-toggle" id="toggleMissionFormBtn" onclick="openMissionPanelForCreate()">🎧 פתיחת קריאה חדשה</button>
+        </div>
+
+        <!-- טופס פתיחה/עריכה - מוסתר כברירת מחדל, מוקפץ בלחיצה -->
+        <section id="missionFormPanel" class="mission-panel hidden">
+            <div class="mission-panel-header">
+                <h2 id="missionPanelTitle">🎧 פתיחת קריאה חדשה</h2>
+                <button type="button" class="mission-panel-close" onclick="closeMissionPanel()">&times;</button>
+            </div>
+
+            <form id="missionForm" novalidate>
+                <input type="hidden" id="editingMissionId" value="">
+
+                <div class="form-group">
+                    <label for="missionDescription">תיאור הקריאה <span class="required">*</span></label>
+                    <textarea id="missionDescription" rows="3" required placeholder="לדוגמה: נדרש עדכון גרסת תוכנה במערכת ה-MMS בעמדות הקבלה"></textarea>
+                </div>
+
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label for="missionCategory">סוג קריאה <span class="required">*</span></label>
+                        <select id="missionCategory" required><option value="">טוען...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="missionPriority">דחיפות <span class="required">*</span></label>
+                        <select id="missionPriority" required><option value="">טוען...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="missionStatus">סטטוס <span class="required">*</span></label>
+                        <select id="missionStatus" required><option value="">טוען...</option></select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="missionDepartment">מחלקה יעד <span class="required">*</span></label>
+                        <select id="missionDepartment" required><option value="">טוען...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="missionAssignTo">הקצה לעובד <span class="required">*</span></label>
+                        <select id="missionAssignTo" required><option value="">בחר מחלקה קודם...</option></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="missionHandlerComment">תגובת הגורם המטפל</label>
+                    <textarea id="missionHandlerComment" rows="2" placeholder="עדכון סטטוס, פירוט הטיפול או סיבת דחייה..."></textarea>
+                </div>
+
+                <div class="form-actions" style="display:flex; gap:0.75rem;">
+                    <button type="submit" class="btn-mission-submit" id="missionSubmitBtn">פתח קריאה</button>
+                    <button type="button" class="btn btn-outline" onclick="closeMissionPanel()">ביטול</button>
+                </div>
+            </form>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- שורת סטטיסטיקה -->
+        <div class="stats-bar">
+            <div class="stat-chip">
+                <span class="stat-value" id="statMissionsTotal">0</span>
+                <span class="stat-label">סה"כ קריאות</span>
+            </div>
+            <div class="stat-chip stat-unassigned">
+                <span class="stat-value" id="statMissionsOpen">0</span>
+                <span class="stat-label">פתוחות / בטיפול</span>
+            </div>
+            <div class="stat-chip stat-critical">
+                <span class="stat-value" id="statMissionsCritical">0</span>
+                <span class="stat-label">בדחיפות קריטית</span>
+            </div>
+        </div>
+
+        <!-- סרגל סינון -->
+        <section class="filter-card">
+            <div class="filter-group">
+                <label for="filterMissionStatus">סטטוס</label>
+                <select id="filterMissionStatus"><option value="">הכל</option></select>
+            </div>
+            <div class="filter-group">
+                <label for="filterMissionPriority">דחיפות</label>
+                <select id="filterMissionPriority"><option value="">הכל</option></select>
+            </div>
+            <div class="filter-group">
+                <label for="filterMissionCategory">סוג קריאה</label>
+                <select id="filterMissionCategory"><option value="">הכל</option></select>
+            </div>
+        </section>
+
+        <!-- טבלת משימות - לחיצה על שורה פותחת אותה לעריכה בטופס למעלה -->
+        <section class="table-container">
+            <table id="missionsTable">
+                <thead>
+                    <tr>
+                        <th>מז"ה</th>
+                        <th>תיאור</th>
+                        <th>סוג</th>
+                        <th>מחלקה</th>
+                        <th>דחיפות</th>
+                        <th>סטטוס</th>
+                        <th>הוקצה ל</th>
+                        <th>נפתחה</th>
+                    </tr>
+                </thead>
+                <tbody id="missionsTableBody">
+                    <tr><td colspan="8" class="placeholder-text" style="text-align:center;">טוען קריאות...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<script src="../js/authGuard.js"></script>
+<script src="../js/missions.js"></script>
+</body>
+</html>

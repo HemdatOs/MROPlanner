@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>התחברות - מערכת ניהול אחזקה</title>
+    <!-- חיבור ל-CSS שנמצא בתיקיית css -->
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+
+<div class="login-card">
+    <img src="../images/MROplannerLogo.png" alt="MRO Planner" class="login-logo">
+    <h2>כניסה למערכת האחזקה</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="employeeId">מספר עובד</label>
+            <input type="text" id="employeeId" required placeholder="הזן מספר עובד">
+        </div>
+        <div class="form-group">
+            <label for="password">סיסמה</label>
+            <input type="password" id="password" required placeholder="הזן סיסמה">
+        </div>
+        <div id="loginError" class="error-msg"></div>
+        <button type="submit" class="btn">התחבר</button>
+    </form>
+    <a class="forgot-link" id="openResetModal">איפוס סיסמה / תוקף פג? לחץ כאן</a>
+</div>
+
+<!-- Modal איפוס סיסמה -->
+<div class="modal" id="resetModal">
+    <div class="modal-content">
+        <h3 style="margin-top:0; color: var(--primary);">איפוס סיסמה מאובטח</h3>
+        <form id="resetForm">
+            <div class="form-group">
+                <label for="resetEmpId">מספר עובד</label>
+                <input type="text" id="resetEmpId" required>
+            </div>
+            <div class="form-group">
+                <label for="resetIdNumber">מספר תעודת זהות</label>
+                <input type="text" id="resetIdNumber" maxlength="9" required>
+            </div>
+            <div class="form-group">
+                <label for="resetOldPass">סיסמה ישנה</label>
+                <input type="password" id="resetOldPass" required>
+            </div>
+            <div class="form-group">
+                <label for="resetNewPass">סיסמה חדשה</label>
+                <input type="password" id="resetNewPass" required>
+            </div>
+            <div class="form-group">
+                <label for="resetConfirmPass">אימות סיסמה חדשה</label>
+                <input type="password" id="resetConfirmPass" required>
+            </div>
+            <div id="resetError" class="error-msg"></div>
+            <div class="modal-actions">
+                <button type="submit" class="btn">עדכן סיסמה</button>
+                <button type="button" class="btn btn-secondary" id="closeResetModal">ביטול</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 👈 הנה החיבור הקריטי לקובץ ה-JS! -->
+<script src="../js/login.js"></script>
+</body>
+</html>

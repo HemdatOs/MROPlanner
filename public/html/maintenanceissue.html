@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פתיחת תקלה ומעקב פעולות - מערכת אחזקה</title>
+
+    <!-- פונטים: Assistant לטקסט עברי, JetBrains Mono למספרי זיהוי / קודים -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- קישור לקובץ העיצוב החיצוני -->
+    <link rel="stylesheet" href="/css/maintenanceissue.css">
+</head>
+<body>
+
+<main class="container">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+<img src="../images/MROplannerLogo.png" alt="MRO Planner">                <span>MRO Planner</span>
+            </div>
+            <h1>דיווח תקלה חדשה</h1>
+            <p class="subtitle">הזנת פרטי תקלה וניהול פעולות תחזוקה בזמן אמת</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+            <span class="ticket-code">ISSUE · DRAFT</span>
+        </div>
+    </header>
+
+    <form id="issueForm" novalidate>
+        <!-- מקטע 1: פרטים כלליים -->
+        <section class="form-section">
+            <h2>01 · פרטים כלליים</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="Title">כותרת התקלה <span class="required">*</span></label>
+                    <input type="text" id="Title" name="Title" required placeholder="לדוגמה: נזילת שמן במערכת הידראולית">
+                </div>
+                <div class="form-group">
+                    <label for="activeVisitsSelect">מזהה ביקור / מספר זנב <span class="required">*</span></label>
+                    <select id="activeVisitsSelect" class="form-control">
+                        <option value="">-- טוען ביקורים... --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- כרטיס פרטי הביקור - מוצג ברגע שנבחר ביקור פעיל -->
+            <div id="visitCard" class="visit-card">
+                <div class="visit-grid">
+                    <div class="visit-field">
+                        <div class="visit-label">מס' ביקור</div>
+                        <div class="visit-value" id="valVisitId">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">מטוס</div>
+                        <div class="visit-value" id="valAircraft">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">לקוח</div>
+                        <div class="visit-value" id="valCustomer">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">איש קשר</div>
+                        <div class="visit-value" id="valContact">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">מיקום במגדל</div>
+                        <div class="visit-value" id="valHangar">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">כניסה</div>
+                        <div class="visit-value" id="valEntryDate">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">יעד יציאה</div>
+                        <div class="visit-value" id="valTargetDate">—</div>
+                    </div>
+                    <div class="visit-field">
+                        <div class="visit-label">סטטוס לו"ז</div>
+                        <div class="visit-value" id="valStatus">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Description">תיאור מורחב</label>
+                <textarea id="Description" name="Description" rows="3" placeholder="פרט את מהות התקלה, נסיבות הגילוי ומיקום מדויק..."></textarea>
+            </div>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- מקטע 2: סיווג וחומרה (נתונים מהשרת) -->
+        <section class="form-section">
+            <h2>02 · סיווג וחומרה</h2>
+            <div class="grid-3">
+                <div class="form-group">
+                    <label for="FaultCategory">קטגוריית תקלה <span class="required">*</span></label>
+                    <select id="FaultCategory" name="FaultCategory" required><option value="">טוען...</option></select>
+
+                    <!-- תיבת תיאור הקטגוריה הדינמית -->
+                    <div id="categoryDescBox" class="category-desc-box hidden">
+                        <span class="info-icon">ℹ️</span>
+                        <span id="categoryDescText"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="SeverityId">חומרה (Severity) <span class="required">*</span></label>
+                    <select id="SeverityId" name="SeverityId" required><option value="">טוען...</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="PriorityId">עדיפות (Priority) <span class="required">*</span></label>
+                    <select id="PriorityId" name="PriorityId" required><option value="">טוען...</option></select>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="StatusID">סטטוס (Status) <span class="required">*</span></label>
+                    <select id="StatusID" name="StatusID" required><option value="">טוען...</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="DepartmentCode">מחלקת אחזקה <span class="required">*</span></label>
+                    <select id="DepartmentCode" name="DepartmentCode" required><option value="">טוען...</option></select>
+
+                    <!-- תיבת תיאור המחלקה הדינמית -->
+                    <div id="deptDescBox" class="category-desc-box hidden">
+                        <span class="info-icon">ℹ️</span>
+                        <span id="deptDescText"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- מקטע 3: הקצה ומשתמשים -->
+        <section class="form-section">
+            <h2>03 · הקצאה ומשתמשים</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="assingTo">הקצה לטכנאי (Assign To)</label>
+                    <select id="assingTo" name="assingTo"><option value="">בחר טכנאי...</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="createdBy">דווח על ידי (Created By) <span class="required">*</span></label>
+                    <select id="createdBy" name="createdBy" required><option value="">בחר את שמך...</option></select>
+                </div>
+            </div>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- מקטע 4: הוספת פעולות וחלפים -->
+        <section class="form-section">
+            <div class="section-header-inline">
+                <h2>04 · פעולות שננקטו (Actions)</h2>
+                <button type="button" class="btn btn-secondary" id="addActionBtn">+ הוסף פעולת טיפול</button>
+            </div>
+            <div id="actionsContainer"></div>
+        </section>
+
+        <!-- מקטע 5: מסמכים מצורפים -->
+        <section class="form-section">
+            <h2>05 · מסמכים מצורפים</h2>
+            <div class="attachments-zone">
+                <label for="issueAttachmentsInput" class="btn btn-outline" style="cursor:pointer;">📎 בחר קבצים לצירוף</label>
+                <input type="file" id="issueAttachmentsInput" multiple class="hidden">
+                <div id="attachmentsList" class="attachments-list">
+                    <p class="attachments-empty">לא צורפו קבצים עדיין</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- שליחת הטופס -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">שמור תקלה ופעולות במסד הנתונים</button>
+        </div>
+    </form>
+</main>
+
+<!-- קישור לקובץ הלוגיקה החיצוני -->
+<script src="/js/authGuard.js"></script>
+<script src="/js/maintenanceissue.js"></script>
+</body>
+</html>

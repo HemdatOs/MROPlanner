@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דף הבית - מערכת אחזקה</title>
+    <!-- חיבור ל-CSS שבתיקיית css -->
+    <link rel="stylesheet" href="../css/homePage.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="navbar-brand">
+        <img src="../images/MROplannerLogo.png" alt="MRO Planner" class="navbar-logo">
+        <h2>מערכת ניהול אחזקת מטוסים</h2>
+    </div>
+    <div class="user-nav-actions">
+        <div class="notif-bell-wrap">
+            <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifDropdown()">
+                🔔
+                <span class="notif-badge hidden" id="notifBadge">0</span>
+            </button>
+            <div class="notif-dropdown hidden" id="notifDropdown">
+                <div class="notif-dropdown-header">
+                    <span>התראות</span>
+                    <button type="button" class="notif-mark-all" onclick="markAllNotificationsRead()">סמן הכל כנקרא</button>
+                </div>
+                <div id="notifList" class="notif-list"><p class="notif-empty">טוען...</p></div>
+            </div>
+        </div>
+        <span id="userGreeting">שלום, אורח</span>
+        <button class="logout-btn" id="logoutBtn">התנתק</button>
+    </div>
+</header>
+
+<main class="container">
+    <nav class="top-nav-strip">
+        <a href="myInbox.html" class="nav-item">
+            <span class="nav-icon">📥</span>
+            <span class="nav-label">האזור שלי</span>
+        </a>
+        <a href="dashboard.html" class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">לוח בקרה</span>
+        </a>
+        <a href="manage_issues.html" class="nav-item">
+            <span class="nav-icon">🛠️</span>
+            <span class="nav-label">תקלות פתוחות</span>
+        </a>
+        <a href="schedule.html" class="nav-item technician-hidden" id="navSchedule">
+            <span class="nav-icon">📅</span>
+            <span class="nav-label">לוחות זמנים</span>
+        </a>
+        <a href="reports.html" class="nav-item">
+            <span class="nav-icon">📄</span>
+            <span class="nav-label">דוחות</span>
+        </a>
+        <a href="manage_visits.html" class="nav-item technician-hidden" id="navVisits">
+            <span class="nav-icon">✈️</span>
+            <span class="nav-label">ביקורי מטוסים</span>
+        </a>
+        <a href="changelog.html" class="nav-item technician-hidden" id="navChangelog">
+            <span class="nav-icon">📜</span>
+            <span class="nav-label">לוג שינויים</span>
+        </a>
+    </nav>
+
+    <!-- דשבורד לייאוט ההאנגר - מטוסים בעמדות בפועל, עם פילוג סטטוסים לכל ביקור -->
+    <section class="hangar-dashboard">
+        <h2><span class="hangar-title-icon">🏭</span> מפת ההאנגר - ביקורים פעילים</h2>
+        <p class="hangar-subtitle">לחיצה על עמדה תעביר ישירות למסך עריכת התקלות של אותו ביקור</p>
+        <div id="hangarGrid" class="hangar-grid">
+            <p class="hangar-loading">טוען נתוני האנגר...</p>
+        </div>
+    </section>
+
+    <section class="grid">
+        <!-- 👈 הקישור הישיר המתוקן לדף התקלות -->
+        <a href="maintenanceissue.html" class="card">
+            <span class="card-icon">🛠️</span>
+            <h3>דיווח תקלה חדשה</h3>
+            <p>הזנת פרטי תקלה, שיוך מחלקה ופעולות טיפול בזמן אמת</p>
+        </a>
+
+        <!-- 👈 חדש: קישור לדף ניהול ועריכת תקלות -->
+        <a href="manage_issues.html" class="card">
+            <span class="card-icon">🗂️</span>
+            <h3>ניהול ועריכת תקלות</h3>
+            <p>צפייה, סינון ועדכון תקלות פתוחות לפי ביקור</p>
+        </a>
+
+        <!-- 👈 חדש: קישור לדף קריאות אחזקה כלליות -->
+        <a href="missions.html" class="card">
+            <span class="card-icon">📞</span>
+            <h3>קריאות אחזקה כלליות</h3>
+            <p>פתיחת קריאה לגורם תומך (הנדסה, IT, איכות) שלא תלויה במטוס ספציפי</p>
+        </a>
+
+        <!-- 👈 חדש: קישור לדף הדוחות -->
+        <a href="reports.html" class="card">
+            <span class="card-icon">📄</span>
+            <h3>דוחות</h3>
+            <p>הפקת דוחות מובנים, תצוגה מקדימה וייצוא לאקסל</p>
+        </a>
+
+        <!-- 👈 חדש: קישור לדף הדשבורדים -->
+        <a href="dashboard.html" class="card">
+            <span class="card-icon">📊</span>
+            <h3>דשבורדים</h3>
+            <p>מבט מיידי על כל המערכת - KPI, מגמות, עומס ומטוסים</p>
+        </a>
+
+        <!-- 👈 חדש: קישור לניהול ביקורים -->
+        <a href="manage_visits.html" class="card technician-hidden" id="cardVisits">
+            <span class="card-icon">✈️</span>
+            <h3>ביקורי מטוסים</h3>
+            <p>עריכת תאריכי יעד, פתיחת ביקור חדש וסגירה עם חתימה כפולה</p>
+        </a>
+
+        <!-- כרטיס דשבורד מנהלים (לבקרה בעתיד) -->
+        <a href="manage_users.html" class="card admin-only hidden" id="adminCard">
+            <span class="card-icon">👤</span>
+            <h3>ניהול משתמשים</h3>
+            <p>יצירת עובד חדש עם סיסמה זמנית, רשימת כל המשתמשים במערכת</p>
+        </a>
+    </section>
+</main>
+
+<!-- חיבור ל-JS שבתיקיית js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="../js/authGuard.js"></script>
+<script src="../js/homePage.js"></script>
+</body>
+</html>

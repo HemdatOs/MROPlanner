@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוחות זמנים - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/schedule.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>לוחות זמנים</h1>
+            <p class="subtitle">כל הביקורים הפעילים - מכניסה ליעד יציאה. לחיצה על פס מציגה את התקלות הפתוחות שלו.</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <section class="form-section" style="padding-top:1.75rem;">
+            <div id="ganttWrap" class="gantt-wrap">
+                <p class="placeholder-text">טוען...</p>
+            </div>
+        </section>
+
+        <!-- פאנל קידוח - נפתח מתחת לגאנט כשלוחצים על פס -->
+        <section id="drilldownPanel" class="drilldown-panel hidden">
+            <div class="drilldown-header">
+                <h2 id="drilldownTitle">תקלות פתוחות</h2>
+                <button type="button" class="visit-edit-close" onclick="closeDrilldown()">&times;</button>
+            </div>
+            <div id="drilldownContent" class="nested-issues-preview"></div>
+        </section>
+    </div>
+</main>
+
+<script src="../js/authGuard.js"></script>
+<script src="../js/schedule.js"></script>
+</body>
+</html>

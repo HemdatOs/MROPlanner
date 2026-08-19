@@ -1,0 +1,149 @@
+/* =========================================================
+   MRO Planner — Schedule page (בונה על גבי theme.css)
+   ========================================================= */
+
+.gantt-wrap {
+    direction: ltr;
+    overflow-x: auto;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+}
+.gantt-header, .gantt-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line-soft);
+    min-width: 600px;
+}
+.gantt-header { background: var(--paper-stub); }
+.gantt-row:last-child { border-bottom: none; }
+.gantt-label-col {
+    width: 170px;
+    flex-shrink: 0;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink);
+    direction: rtl;
+    text-align: right;
+    font-family: var(--mono);
+    border-left: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.gantt-timeline-col {
+    position: relative;
+    flex: 1;
+    height: 46px;
+}
+.gantt-header .gantt-timeline-col { height: 30px; }
+.gantt-tick-label {
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    white-space: nowrap;
+}
+.gantt-bar {
+    position: absolute;
+    top: 8px;
+    height: 30px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.gantt-bar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+}
+.gantt-bar.active {
+    outline: 3px solid var(--ink);
+    outline-offset: 1px;
+}
+
+.mini-ring {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: conic-gradient(var(--green) calc(var(--pct, 0) * 1%), var(--line) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+}
+.mini-ring::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: var(--paper-stub);
+    border-radius: 50%;
+}
+.mini-ring span {
+    position: relative;
+    font-size: 0.52rem;
+    font-weight: 700;
+    color: var(--ink);
+    font-family: var(--mono);
+}
+
+/* --- פאנל קידוח --- */
+.drilldown-panel {
+    margin-top: 1.75rem;
+    background: var(--brand-blue-light);
+    border: 1px solid var(--brand-blue);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    animation: slideDown 0.2s ease-in-out;
+}
+.drilldown-header {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.drilldown-header h2 { color: #fff; border: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 1.1rem; letter-spacing: normal; text-transform: none; }
+.drilldown-panel .nested-issues-preview { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+
+/* --- כרטיסי תקלה מקוננים (זהה לדף הדוחות) --- */
+.nested-issue-card {
+    background: var(--paper-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+}
+.nested-issue-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+.nested-issue-number { font-family: var(--mono); font-weight: 700; color: var(--brand-blue-dark); }
+.nested-issue-title { font-weight: 700; flex: 1; }
+.nested-issue-meta { font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 0.85rem; }
+
+.nested-actions-list {
+    border-top: 1px dashed var(--line-soft);
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.nested-action-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    background: var(--paper-stub);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.8rem;
+}
+.nested-action-index { font-family: var(--mono); font-weight: 700; color: var(--ink-soft); }
+.nested-action-desc { flex: 1; min-width: 160px; }
+.nested-action-meta { font-size: 0.76rem; color: var(--ink-soft); }

@@ -1,0 +1,156 @@
+/* =========================================================
+   MRO Planner — My Inbox page (בונה על גבי theme.css)
+   ========================================================= */
+
+.profile-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem;
+    background: var(--paper-stub);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+}
+.profile-field .profile-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 0.2rem;
+}
+.profile-field .profile-value {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ink);
+}
+
+.dashboard-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--line-soft);
+    margin-bottom: 1.5rem;
+}
+.dashboard-tab {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 0.75rem 1.1rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin-bottom: -2px;
+}
+.dashboard-tab:hover { color: var(--brand-blue); }
+.dashboard-tab.active { color: var(--brand-blue-dark); border-bottom-color: var(--brand-blue); }
+
+.inbox-subheading {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--brand-blue-dark);
+    margin: 1.5rem 0 0.85rem;
+    text-transform: uppercase;
+}
+.inbox-subheading:first-child { margin-top: 0; }
+
+/* --- כרטיסי תקלה מקוננים (זהה לדף הדוחות/לוחות זמנים) --- */
+.nested-issues-preview { display: flex; flex-direction: column; gap: 1.1rem; }
+.nested-issue-card {
+    background: var(--paper-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+}
+.nested-issue-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.5rem; }
+.nested-issue-number { font-family: var(--mono); font-weight: 700; color: var(--brand-blue-dark); }
+.nested-issue-title { font-weight: 700; flex: 1; }
+.nested-issue-meta { font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 0.85rem; }
+.nested-actions-list { border-top: 1px dashed var(--line-soft); padding-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.nested-action-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; flex-wrap: wrap; background: var(--paper-stub); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; }
+.nested-action-index { font-family: var(--mono); font-weight: 700; color: var(--ink-soft); }
+.nested-action-desc { flex: 1; min-width: 160px; }
+.nested-action-meta { font-size: 0.76rem; color: var(--ink-soft); }
+
+/* --- רשימת משימות (קריאות כלליות) --- */
+.missions-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.mission-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: var(--paper-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1.1rem;
+    flex-wrap: wrap;
+}
+.mission-row .mission-id { font-family: var(--mono); font-weight: 700; color: var(--brand-blue-dark); flex-shrink: 0; }
+.mission-row .mission-desc { flex: 1; min-width: 200px; font-size: 0.88rem; }
+.mission-row .mission-meta { font-size: 0.76rem; color: var(--ink-soft); }
+
+/* --- מודל צף לצפייה/עריכה של קריאה --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+.modal-box {
+    background: #fff;
+    border-radius: var(--radius-md);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+.mission-row { cursor: pointer; }
+.mission-row:hover { border-color: var(--brand-blue); }
+
+.visit-edit-header {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.visit-edit-header h2 { color: #fff; border: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 1.1rem; letter-spacing: normal; text-transform: none; }
+.visit-edit-close { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+.visit-edit-close:hover { background: rgba(255,255,255,0.3); }
+
+.chart-note {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.25rem;
+    background: var(--paper-stub);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+}
+
+.btn-edit-issue {
+    margin-inline-start: auto;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--brand-blue-dark);
+    background: var(--brand-blue-light);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.btn-edit-issue:hover { background: var(--brand-blue); color: #fff; }
+
+.inbox-new-mission-link {
+    display: inline-block;
+    margin-top: 0.85rem;
+    text-decoration: none;
+}

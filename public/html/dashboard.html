@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוח בקרה - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>לוח בקרה</h1>
+            <p class="subtitle">תמונת מצב מיידית על כל המערכת</p>
+        </div>
+        <div class="header-actions">
+            <button type="button" id="presentationModeBtn" class="btn-home" onclick="togglePresentationMode()">🖥️ מצב תצוגה</button>
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <!-- שורת KPI עליונה -->
+        <section class="form-section" style="padding-top:1.75rem;">
+            <h2>מבט ראשון</h2>
+            <div class="kpi-grid" id="kpiGrid">
+                <div class="kpi-card kpi-blue">
+                    <span class="kpi-icon">🛠️</span>
+                    <span class="kpi-value" id="kpiOpenIssues">—</span>
+                    <span class="kpi-label">תקלות פתוחות</span>
+                </div>
+                <div class="kpi-card kpi-critical">
+                    <span class="kpi-icon">🔴</span>
+                    <span class="kpi-value" id="kpiCriticalIssues">—</span>
+                    <span class="kpi-label">מהן קריטיות</span>
+                </div>
+                <div class="kpi-card kpi-blue">
+                    <span class="kpi-icon">✈️</span>
+                    <span class="kpi-value" id="kpiActiveVisits">—</span>
+                    <span class="kpi-label">ביקורים פעילים</span>
+                </div>
+                <div class="kpi-card kpi-warning">
+                    <span class="kpi-icon">🚨</span>
+                    <span class="kpi-value" id="kpiOverdueVisits">—</span>
+                    <span class="kpi-label">בפיגור לו"ז</span>
+                </div>
+                <div class="kpi-card kpi-purple">
+                    <span class="kpi-icon">📞</span>
+                    <span class="kpi-value" id="kpiOpenMissions">—</span>
+                    <span class="kpi-label">קריאות כלליות פתוחות</span>
+                </div>
+                <div class="kpi-card kpi-warning">
+                    <span class="kpi-icon">📎</span>
+                    <span class="kpi-value" id="kpiMissingDocs">—</span>
+                    <span class="kpi-label">תקלות סגורות בלי תיעוד</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- קבוצה 1: דשבורדים כלל-מערכתיים -->
+        <section class="form-section technician-hidden" id="systemWideSection">
+            <h2>נתונים כלל-מערכתיים</h2>
+            <div class="dashboard-tabs" id="systemTabs">
+                <button type="button" class="dashboard-tab active" data-tab="trends">📈 מגמות לאורך זמן</button>
+                <button type="button" class="dashboard-tab" data-tab="categories">🔧 פילוח תקלות לפי קטגוריה</button>
+                <button type="button" class="dashboard-tab" data-tab="timeline">🗓️ ציר זמן יציאות</button>
+            </div>
+
+            <div class="dashboard-tab-content" id="tab-trends">
+                <div class="chart-scope-filter">
+                    <label for="trendsVisitFilter">ביקור:</label>
+                    <select id="trendsVisitFilter">
+                        <option value="">כלל המערכת</option>
+                    </select>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-tab-content hidden" id="tab-categories">
+                <p class="chart-note">כלל-מערכתי - כל התקלות מאז ומתמיד, לא רק פתוחות</p>
+                <div class="chart-wrap">
+                    <canvas id="categoriesChart"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-tab-content hidden" id="tab-timeline">
+                <p class="chart-note">כל הביקורים הפעילים - מכניסה ליעד יציאה. כלל-מערכתי. (לקידוח פנימה לתקלות - <a href="schedule.html">לוחות זמנים</a>)</p>
+                <div id="ganttWrap" class="gantt-wrap"></div>
+            </div>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- קבוצה 2: נתונים לפי מטוס / ביקור -->
+        <section class="form-section">
+            <h2>נתונים לפי מטוס / ביקור</h2>
+            <div class="dashboard-tabs" id="aircraftTabs">
+                <button type="button" class="dashboard-tab active" data-tab="fleet">✈️ תקלות לפי מטוס (סה"כ)</button>
+                <button type="button" class="dashboard-tab" data-tab="hours">⏱️ זמן טיפול לפי מטוס</button>
+                <button type="button" class="dashboard-tab" data-tab="workload">🧑‍🔧 עומס לפי מחלקה</button>
+                <button type="button" class="dashboard-tab" data-tab="employees">👥 עובדים לפי ביקור ומחלקה</button>
+            </div>
+
+            <div class="dashboard-tab-content" id="tab-fleet">
+                <p class="chart-note">משווה בין מטוסים - לכן תמיד כלל-מערכתי, לא ניתן לסינון לפי ביקור בודד</p>
+                <div class="chart-wrap">
+                    <canvas id="fleetChart"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-tab-content hidden" id="tab-hours">
+                <p class="chart-note">⚠️ הערכה, לא שעות עבודה שדווחו בפועל - מחושב מזמן חלוף בין פתיחה לסגירה (CreatedAt→ClosedAt), בהנחה של 9 שעות עבודה ליום קלנדרי שחלף (לא 24). כלל-מערכתי, רק תקלות סגורות.</p>
+                <div class="chart-wrap">
+                    <canvas id="hoursChart"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-tab-content hidden" id="tab-workload">
+                <div class="chart-scope-filter">
+                    <label for="workloadVisitFilter">ביקור:</label>
+                    <select id="workloadVisitFilter">
+                        <option value="">כלל המערכת</option>
+                    </select>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="workloadChart"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-tab-content hidden" id="tab-employees">
+                <div class="chart-scope-filter">
+                    <label for="employeesVisitFilter">ביקור:</label>
+                    <select id="employeesVisitFilter">
+                        <option value="">-- בחר ביקור --</option>
+                    </select>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="employeesChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="../js/authGuard.js"></script>
+<script src="../js/dashboard.js"></script>
+</body>
+</html>

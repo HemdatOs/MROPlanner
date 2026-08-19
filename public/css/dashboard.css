@@ -1,0 +1,191 @@
+/* =========================================================
+   MRO Planner — Dashboard page (בונה על גבי theme.css)
+   ========================================================= */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+.kpi-card {
+    background: var(--paper-stub);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+    padding: 1.2rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 4px;
+}
+.kpi-card .kpi-icon {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+.kpi-card .kpi-value {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 2.1rem;
+    color: var(--brand-blue-dark);
+    display: block;
+}
+.kpi-card .kpi-label {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 0.3rem;
+    display: block;
+}
+.kpi-card.kpi-blue { background: var(--brand-blue-light); }
+.kpi-card.kpi-blue::before { background: var(--brand-blue); }
+.kpi-card.kpi-critical { background: #fef2f2; }
+.kpi-card.kpi-critical::before { background: var(--danger); }
+.kpi-card.kpi-critical .kpi-value { color: var(--danger); }
+.kpi-card.kpi-warning { background: #fffbeb; }
+.kpi-card.kpi-warning::before { background: var(--amber); }
+.kpi-card.kpi-warning .kpi-value { color: var(--amber); }
+.kpi-card.kpi-purple { background: #f5f3ff; }
+.kpi-card.kpi-purple::before { background: #7c3aed; }
+.kpi-card.kpi-purple .kpi-value { color: #7c3aed; }
+
+.dashboard-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--line-soft);
+    margin-bottom: 1.5rem;
+}
+.dashboard-tab {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 0.75rem 1.1rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    margin-bottom: -2px;
+}
+.dashboard-tab:hover { color: var(--brand-blue); }
+.dashboard-tab.active {
+    color: var(--brand-blue-dark);
+    border-bottom-color: var(--brand-blue);
+}
+.dashboard-tab-content { min-height: 160px; }
+.chart-wrap { position: relative; width: 100%; height: 340px; }
+
+.chart-scope-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+}
+.chart-scope-filter select {
+    width: auto;
+    min-width: 220px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+}
+.chart-note {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.75rem;
+}
+
+/* --- מצב תצוגה מוגדל (לישיבות/מסך מוקרן) --- */
+body.presentation-mode .page-shell { max-width: 100%; padding: 2rem 3rem; }
+body.presentation-mode .kpi-card .kpi-value { font-size: 3.2rem; }
+body.presentation-mode .kpi-card .kpi-label { font-size: 1.05rem; }
+body.presentation-mode .kpi-card .kpi-icon { font-size: 2rem; }
+body.presentation-mode h1 { font-size: 2.4rem; }
+body.presentation-mode h2 { font-size: 1.4rem; }
+body.presentation-mode .dashboard-tab { font-size: 1.15rem; padding: 1rem 1.5rem; }
+body.presentation-mode .chart-wrap { height: 480px; }
+body.presentation-mode .chart-note { font-size: 1rem; }
+body.presentation-mode .subtitle { font-size: 1.1rem; }
+
+.gantt-wrap {
+    direction: ltr;
+    overflow-x: auto;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-sm);
+}
+.gantt-header, .gantt-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line-soft);
+    min-width: 600px;
+}
+.gantt-header { background: var(--paper-stub); }
+.gantt-row:last-child { border-bottom: none; }
+.gantt-label-col {
+    width: 170px;
+    flex-shrink: 0;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink);
+    direction: rtl;
+    text-align: right;
+    font-family: var(--mono);
+    border-left: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.gantt-timeline-col {
+    position: relative;
+    flex: 1;
+    height: 46px;
+}
+.gantt-header .gantt-timeline-col { height: 30px; }
+.gantt-tick-label {
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    white-space: nowrap;
+}
+.gantt-bar {
+    position: absolute;
+    top: 8px;
+    height: 30px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    cursor: default;
+}
+.mini-ring {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: conic-gradient(var(--green) calc(var(--pct, 0) * 1%), var(--line) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+}
+.mini-ring::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: var(--paper-stub);
+    border-radius: 50%;
+}
+.mini-ring span {
+    position: relative;
+    font-size: 0.52rem;
+    font-weight: 700;
+    color: var(--ink);
+    font-family: var(--mono);
+}

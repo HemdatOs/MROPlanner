@@ -1,0 +1,229 @@
+:root {
+    --primary: #1e3a8a;
+    --primary-hover: #1e40af;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header h1 {
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.filter-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.filter-group.highlight select {
+    border: 2px solid var(--primary);
+    font-weight: bold;
+}
+
+select, input, textarea {
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.table-container {
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+}
+
+th, td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background-color: #f1f5f9;
+    color: var(--primary);
+}
+
+tr:hover {
+    background-color: #f8fafc;
+}
+
+.btn-edit {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background: var(--primary-hover);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 750px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+}
+
+.close-btn {
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.action-card-item {
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border-right: 4px solid var(--primary);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-save { background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-cancel { background: #94a3b8; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-secondary { background: #0284c7; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+
+/* יישור ועיצוב הטבלה */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+#issuesTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+    font-size: 0.95rem;
+}
+
+#issuesTable th, 
+#issuesTable td {
+    padding: 12px 14px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#issuesTable th {
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* הגבלת רוחב לכותרת התקלה כדי שלא תמתח את הטבלה */
+.col-title {
+    max-width: 250px;
+    word-break: break-word;
+}
+
+/* עיצוב מראה התגיות (Badges) */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+/* דוגמאות לצבעי סטטוסים וחומרה לפי ה-ID */
+.badge.status-1 { background-color: #e0f2fe; color: #0369a1; } /* פתוח - כחול */
+.badge.status-2 { background-color: #fef3c7; color: #b45309; } /* בטיפול - כתום */
+.badge.status-3 { background-color: #dcfce7; color: #15803d; } /* סגור - ירוק */
+
+.badge.severity-3, 
+.badge.priority-3 { background-color: #fee2e2; color: #b91c1c; } /* קריטי/גבוה - אדום */
+
+/* יישור הפילטרים בתוך כותרת הטבלה */
+.table-header-filter {
+    margin-right: 6px;
+    padding: 3px 6px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    background-color: #ffffff;
+}

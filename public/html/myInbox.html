@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>האזור שלי - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/myInbox.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>האזור שלי</h1>
+            <p class="subtitle">הפרטים שלך, מה שמוקצה אליך, ומה שפתחת</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <!-- פרטים אישיים -->
+        <section class="form-section" style="padding-top:1.75rem;">
+            <h2>פרטים אישיים</h2>
+            <div class="profile-card" id="profileCard">
+                <p class="placeholder-text">טוען...</p>
+            </div>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- טאבים - מוקצה אלי / מה שפתחתי -->
+        <section class="form-section">
+            <div class="dashboard-tabs" id="inboxTabs">
+                <button type="button" class="dashboard-tab active" data-tab="assigned">📥 מוקצה אלי לטיפול</button>
+                <button type="button" class="dashboard-tab" data-tab="opened">📤 מה שפתחתי (למעקב)</button>
+            </div>
+
+            <div class="dashboard-tab-content" id="tab-assigned">
+                <p class="chart-note">כאן רואים רק דברים שמישהו שיוך <strong>אלייך</strong> לטיפול - זה מה שאת אמורה לעבוד עליו.</p>
+
+                <h3 class="inbox-subheading">תקלות שהוקצו לי (פתוחות)</h3>
+                <div id="assignedIssues" class="nested-issues-preview"><p class="placeholder-text">טוען...</p></div>
+
+                <h3 class="inbox-subheading">קריאות כלליות שהוקצו לי</h3>
+                <div id="assignedMissions" class="missions-list"><p class="placeholder-text">טוען...</p></div>
+                <a href="missions.html" class="btn btn-outline inbox-new-mission-link">+ פתיחת קריאה חדשה</a>
+            </div>
+
+            <div class="dashboard-tab-content hidden" id="tab-opened">
+                <p class="chart-note">כאן רואים כל מה <strong>שאת בעצמך פתחת</strong> במערכת (גם אם שויך למישהו אחר לטיפול) - כדי לעקוב מה קורה איתן, בכל סטטוס.</p>
+
+                <h3 class="inbox-subheading">תקלות שפתחתי (כל הסטטוסים)</h3>
+                <div id="openedIssues" class="nested-issues-preview"><p class="placeholder-text">טוען...</p></div>
+
+                <h3 class="inbox-subheading">קריאות כלליות שפתחתי</h3>
+                <div id="openedMissions" class="missions-list"><p class="placeholder-text">טוען...</p></div>
+                <a href="missions.html" class="btn btn-outline inbox-new-mission-link">+ פתיחת קריאה חדשה</a>
+            </div>
+        </section>
+    <!-- מודל צף - צפייה/עריכה של קריאה כללית -->
+    <div id="missionModalOverlay" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="visit-edit-header">
+                <h2 id="missionModalTitle">קריאה</h2>
+                <button type="button" class="visit-edit-close" onclick="closeMissionModal()">&times;</button>
+            </div>
+            <form id="missionModalForm" style="padding:1.5rem;">
+                <div class="form-group">
+                    <label for="missionModalDescription">תיאור</label>
+                    <textarea id="missionModalDescription"></textarea>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="missionModalStatus">סטטוס</label>
+                        <select id="missionModalStatus"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="missionModalPriority">עדיפות</label>
+                        <select id="missionModalPriority"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="missionModalComment">הערת גורם מטפל</label>
+                    <textarea id="missionModalComment"></textarea>
+                </div>
+                <div class="form-actions" style="display:flex; gap:0.75rem;">
+                    <button type="submit" class="btn btn-primary">שמור שינויים</button>
+                    <button type="button" class="btn btn-outline" onclick="closeMissionModal()">סגירה</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script src="../js/authGuard.js"></script>
+<script src="../js/myInbox.js"></script>
+</body>
+</html>

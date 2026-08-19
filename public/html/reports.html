@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דוחות - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/reports.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>דוחות</h1>
+            <p class="subtitle">בחירת דוח מובנה, סינון, תצוגה מקדימה וייצוא לאקסל</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <!-- שלב 1: בחירת סוג הדוח -->
+        <section class="form-section" style="padding-top:1.75rem;">
+            <h2>01 · סוג הדוח</h2>
+            <div class="report-type-cards">
+                <button type="button" class="report-type-card active" data-report="open-issues">
+                    <span class="report-icon">🛠️</span>
+                    <span class="report-title">תקלות פתוחות</span>
+                    <span class="report-desc">כל התקלות, עם הפעולות תחת כל אחת</span>
+                </button>
+                <button type="button" class="report-type-card" data-report="my-issues">
+                    <span class="report-icon">👤</span>
+                    <span class="report-title">התקלות שלי</span>
+                    <span class="report-desc">רק מה שהוקצה למשתמש המחובר</span>
+                </button>
+                <button type="button" class="report-type-card technician-hidden" data-report="activity">
+                    <span class="report-icon">📊</span>
+                    <span class="report-title">פעילות</span>
+                    <span class="report-desc">כמות תקלות/פעולות לפי עובד או מחלקה</span>
+                </button>
+                <button type="button" class="report-type-card" data-report="aging">
+                    <span class="report-icon">⏳</span>
+                    <span class="report-title">וותק תקלות</span>
+                    <span class="report-desc">כמה זמן כל תקלה פתוחה כרגע</span>
+                </button>
+                <button type="button" class="report-type-card technician-hidden" data-report="workload">
+                    <span class="report-icon">🧑‍🔧</span>
+                    <span class="report-title">עומס עובדים</span>
+                    <span class="report-desc">כמה תקלות פתוחות מוקצות לכל עובד</span>
+                </button>
+                <button type="button" class="report-type-card" data-report="fleet-history">
+                    <span class="report-icon">✈️</span>
+                    <span class="report-title">היסטוריית מטוסים</span>
+                    <span class="report-desc">ביקורים ותקלות לכל מטוס בצי</span>
+                </button>
+                <button type="button" class="report-type-card" data-report="quality-compliance">
+                    <span class="report-icon">📎</span>
+                    <span class="report-title">תיעוד חסר</span>
+                    <span class="report-desc">תקלות שנסגרו בלי אף מסמך מצורף</span>
+                </button>
+                <button type="button" class="report-type-card technician-hidden" data-report="missions-sla">
+                    <span class="report-icon">📞</span>
+                    <span class="report-title">קריאות פתוחות</span>
+                    <span class="report-desc">קריאות אחזקה כלליות, ממוינות לפי וותק</span>
+                </button>
+                <button type="button" class="report-type-card technician-hidden" data-report="schedule-gap">
+                    <span class="report-icon">🚨</span>
+                    <span class="report-title">פערי לו"ז</span>
+                    <span class="report-desc">ביקורים שעברו את יעד היציאה ועדיין פתוחים</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- שלב 2: סינון -->
+        <section class="form-section">
+            <h2>02 · סינון</h2>
+            <div class="grid-2">
+                <div class="form-group" id="visitFilterWrap">
+                    <label for="reportVisitSelect">ביקור</label>
+                    <select id="reportVisitSelect">
+                        <option value="">כל הביקורים</option>
+                    </select>
+                </div>
+                <div class="form-group hidden" id="groupByWrap">
+                    <label for="reportGroupBy">קיבוץ לפי</label>
+                    <select id="reportGroupBy">
+                        <option value="department">מחלקה / תחנה</option>
+                        <option value="employee">עובד</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="runReportBtn">📄 הפק דוח</button>
+        </section>
+
+        <div class="perforation"></div>
+
+        <!-- שלב 3: בחירת עמודות רלוונטיות -->
+        <section class="form-section" id="columnPickerSection" style="display:none;">
+            <h2>03 · עמודות להצגה וייצוא</h2>
+            <div id="columnPicker" class="column-picker"></div>
+        </section>
+
+        <!-- שלב 4: תצוגה מקדימה + ייצוא -->
+        <section class="form-section" id="previewSection" style="display:none;">
+            <div class="section-header-inline">
+                <h2>04 · תצוגה מקדימה</h2>
+                <button type="button" class="btn btn-primary" id="exportExcelBtn">⬇️ ייצוא לאקסל</button>
+            </div>
+
+            <!-- תצוגה מקוננת - רק לדוחות "תקלות פתוחות" ו"התקלות שלי" -->
+            <div id="nestedIssuesPreview" class="nested-issues-preview hidden"></div>
+
+            <!-- טבלה שטוחה רגילה - לכל שאר הדוחות -->
+            <div class="table-container" id="flatTableWrap">
+                <table id="reportPreviewTable">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <p id="reportEmptyState" class="placeholder-text hidden" style="text-align:center;">אין נתונים להצגה עבור הבחירה הזו</p>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="../js/authGuard.js"></script>
+<script src="../js/reports.js"></script>
+</body>
+</html>

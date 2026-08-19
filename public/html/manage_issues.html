@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול ועריכת תקלות - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- 🔁 אותו קובץ CSS בדיוק כמו דף פתיחת תקלה - שפת עיצוב אחידה, בלי כפילות עבודה -->
+    <link rel="stylesheet" href="../css/maintenanceissue.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>מעקב ועריכת תקלות</h1>
+            <p class="subtitle">סינון, צפייה בעומק התקלה, עדכון פרטים ותיעוד שינויים אוטומטי</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <!-- סרגל בחירת ביקור -->
+        <section class="filter-card" style="margin-top:1.75rem; align-items:flex-end;">
+            <div class="filter-group highlight">
+                <label for="visitSelect">בחר ביקור / מספר זנב</label>
+                <select id="visitSelect" class="form-control">
+                    <option value="">-- טוען ביקורים... --</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="goToNewIssueForVisit()" style="align-self:center;">+ פתח תקלה חדשה לביקור זה</button>
+        </section>
+
+        <!-- שורת סטטיסטיקה קצרה -->
+        <div class="stats-bar">
+            <div class="stat-chip">
+                <span class="stat-value" id="statTotal">0</span>
+                <span class="stat-label">סה"כ תקלות בביקור</span>
+            </div>
+            <div class="stat-chip stat-critical">
+                <span class="stat-value" id="statCritical">0</span>
+                <span class="stat-label">חומרה/דחיפות קריטית</span>
+            </div>
+            <div class="stat-chip stat-unassigned">
+                <span class="stat-value" id="statUnassigned">0</span>
+                <span class="stat-label">טרם שובצו לטכנאי</span>
+            </div>
+            <div class="stat-chip">
+                <span class="stat-value" id="statActions">0</span>
+                <span class="stat-label">סה"כ פעולות טיפול</span>
+            </div>
+        </div>
+
+        <!-- שורה אחת: התפלגות כללית + פילוג לפי מחלקה, זה לצד זה -->
+        <section class="table-container status-summary-row" style="padding:1.5rem; margin-bottom:1.5rem;">
+            <div class="status-summary-overall">
+                <h2 style="margin-bottom:1rem;">התפלגות סטטוסים - כלל הביקור</h2>
+                <div style="max-width:280px; margin:0 auto;">
+                    <canvas id="visitStatusDonut"></canvas>
+                </div>
+            </div>
+            <div class="status-summary-divider"></div>
+            <div class="status-summary-departments">
+                <h2 style="margin-bottom:1rem;">פילוג סטטוסים לפי מחלקה</h2>
+                <div id="deptDonutsContainer" class="dept-donuts-grid"></div>
+            </div>
+        </section>
+
+        <!-- טבלת תקלות -->
+        <section class="table-container">
+            <table id="issuesTable">
+                <thead>
+                    <tr>
+                        <th>מז"ה</th>
+                        <th>כותרת</th>
+                        <th>נפתח ע"י</th>
+                        <th>מחלקה</th>
+                        <th>
+                            <span class="th-label">סטטוס</span>
+                            <select id="filterStatus" class="table-header-filter" disabled>
+                                <option value="">הכל</option>
+                            </select>
+                        </th>
+                        <th>
+                            <span class="th-label">חומרה</span>
+                            <select id="filterSeverity" class="table-header-filter" disabled>
+                                <option value="">הכל</option>
+                            </select>
+                        </th>
+                        <th>
+                            <span class="th-label">דחיפות</span>
+                            <select id="filterPriority" class="table-header-filter" disabled>
+                                <option value="">הכל</option>
+                            </select>
+                        </th>
+                        <th>מי צריך לטפל</th>
+                        <th>מס' פעולות</th>
+                        <th>פעולות</th>
+                    </tr>
+                </thead>
+                <tbody id="issuesTableBody">
+                    <tr>
+                        <td colspan="10" class="placeholder-text" style="text-align: center;">נא לבחור ביקור מהרשימה להצגת תקלות</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<!-- Modal עריכת תקלה - בנוי באותה שפה חזותית כמו דף פתיחת תקלה חדשה -->
+<div id="editModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>עריכת תקלה <span id="modalIssueNumber">#</span></h2>
+            <button class="close-btn" type="button" onclick="closeModal()">&times;</button>
+        </div>
+
+        <form id="editForm">
+            <input type="hidden" id="editIssueId">
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="editTitle">כותרת התקלה</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="editDescription">תיאור התקלה</label>
+                    <textarea id="editDescription" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="editStatusID">סטטוס</label>
+                    <select id="editStatusID"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editFaultCategory">קטגוריית תקלה</label>
+                    <select id="editFaultCategory"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editSeverityId">חומרה</label>
+                    <select id="editSeverityId"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editPriorityId">דחיפות</label>
+                    <select id="editPriorityId"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editDepartmentCode">מחלקה אחראית</label>
+                    <select id="editDepartmentCode"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editAssignTo">הקצה לטכנאי (Assign To)</label>
+                    <select id="editAssignTo"><option value="">בחר טכנאי...</option></select>
+                </div>
+            </div>
+
+            <!-- מסמכים מצורפים לתקלה עצמה -->
+            <div class="form-group">
+                <label class="form-label">📎 מסמכים מצורפים לתקלה</label>
+                <div class="attachments-zone">
+                    <label class="btn btn-outline" style="cursor:pointer;">
+                        📎 צרף מסמך לתקלה
+                        <input type="file" class="hidden" multiple onchange="handleIssueLevelFileUpload(this)">
+                    </label>
+                    <div id="issueAttachmentsList" class="attachments-list">
+                        <p class="attachments-empty">טוען צירופים...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="perforation" style="margin: 1.75rem 0;"></div>
+
+            <div class="section-header-inline">
+                <h2 style="border:none; padding:0; margin:0;">פעולות מתקנות (Actions)</h2>
+                <button type="button" class="btn btn-secondary" onclick="addEmptyActionCard()">+ הוסף פעולה חדשה</button>
+            </div>
+            <div id="actionsContainer"></div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal()">ביטול</button>
+                <button type="submit" class="btn-save">שמור שינויים ולוג</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="../js/authGuard.js"></script>
+<script src="../js/manage_issues.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+/* =========================================================
+   MRO Planner — Manage Visits page (בונה על גבי theme.css)
+   ========================================================= */
+
+#visitsTable { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.9rem; }
+#visitsTable th, #visitsTable td { padding: 1rem 1.1rem; border-bottom: 1px dashed var(--line-soft); }
+#visitsTable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.76rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+#visitsTable tbody tr { cursor: pointer; }
+#visitsTable tbody tr:hover { background: var(--brand-blue-light); }
+
+.badge.visit-active { background: var(--brand-blue-light); color: var(--brand-blue-dark); }
+.badge.visit-waiting { background: #fef3c7; color: #92400e; }
+.badge.visit-closed { background: #dcfce7; color: #15803d; }
+
+.visits-toolbar {
+    margin-top: 1.75rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.checkbox-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+.checkbox-inline input[type="checkbox"] { width: auto; }
+
+.visit-info-block {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.9rem;
+    background: var(--paper-stub);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.3rem;
+    margin: 1.25rem 1.5rem 0;
+}
+.visit-info-block .info-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 0.15rem;
+}
+.visit-info-block .info-value {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink);
+}
+
+.visit-signoff-section h3 {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--brand-blue-dark);
+    margin-bottom: 0.75rem;
+}
+.signoff-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+}
+.signoff-status .signoff-done { color: #15803d; font-weight: 600; }
+.signoff-status .signoff-waiting { color: var(--ink-soft); }
+.signoff-status .signoff-closed { color: #15803d; font-weight: 700; }
+
+.visit-edit-panel {
+    background: var(--brand-blue-light);
+    border: 1px solid var(--brand-blue);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-top: 1.75rem;
+    animation: slideDown 0.2s ease-in-out;
+}
+.visit-edit-header {
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.visit-edit-header h2 { color: #fff; border: none; margin: 0; padding: 0; font-family: var(--sans); font-size: 1.1rem; letter-spacing: normal; text-transform: none; }
+.visit-edit-close { background: rgba(255,255,255,0.18); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+.visit-edit-close:hover { background: rgba(255,255,255,0.3); }
+.visit-edit-panel form { padding: 1.5rem; }

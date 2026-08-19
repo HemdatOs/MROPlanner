@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עריכת ביקורים - MRO Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/manage_visits.css">
+</head>
+<body>
+
+<main class="container page-shell">
+    <header class="form-header">
+        <div>
+            <div class="brand-row">
+                <img src="../images/MROplannerLogo.png" alt="MRO Planner">
+                <span>MRO Planner</span>
+            </div>
+            <h1>עריכת ביקורים</h1>
+            <p class="subtitle">עדכון יעד יציאה משוער ותאריך יציאה בפועל לכל ביקור</p>
+        </div>
+        <div class="header-actions">
+            <a href="homePage.html" class="btn-home">⇦ לדף הבית</a>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <!-- שורת כלים: כפתור פתיחת ביקור חדש -->
+        <div class="visits-toolbar">
+            <button type="button" class="btn btn-secondary" onclick="openNewVisitPanel()">+ פתיחת ביקור חדש</button>
+        </div>
+
+        <!-- פאנל פתיחת ביקור חדש - מוסתר כברירת מחדל -->
+        <section id="newVisitPanel" class="visit-edit-panel hidden">
+            <div class="visit-edit-header">
+                <h2>פתיחת ביקור חדש</h2>
+                <button type="button" class="visit-edit-close" onclick="closeNewVisitPanel()">&times;</button>
+            </div>
+            <form id="newVisitForm">
+                <div class="form-group">
+                    <label for="newVisitAircraft">מטוס</label>
+                    <select id="newVisitAircraft">
+                        <option value="">-- בחר מטוס קיים --</option>
+                    </select>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="newAircraftToggle" onchange="toggleNewAircraftFields(this)">
+                        <span>זה מטוס חדש שעוד לא קיים במערכת</span>
+                    </label>
+                </div>
+
+                <div id="newAircraftFields" class="grid-3 hidden">
+                    <div class="form-group">
+                        <label for="newAircraftSerial">מספר סידורי (MSN)</label>
+                        <input type="text" id="newAircraftSerial" placeholder="MSN-12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="newAircraftTail">מספר זנב</label>
+                        <input type="text" id="newAircraftTail" placeholder="4X-ABC">
+                    </div>
+                    <div class="form-group">
+                        <label for="newAircraftModel">דגם</label>
+                        <input type="text" id="newAircraftModel" placeholder="Boeing 737-800">
+                    </div>
+                </div>
+
+                <div id="newAircraftCustomerWrap" class="form-group hidden">
+                    <label for="newVisitCustomer">לקוח</label>
+                    <select id="newVisitCustomer">
+                        <option value="">-- בחר לקוח קיים --</option>
+                    </select>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="newCustomerToggle" onchange="toggleNewCustomerFields(this)">
+                        <span>זה לקוח חדש שעוד לא קיים במערכת</span>
+                    </label>
+                </div>
+
+                <div id="newCustomerFields" class="grid-2 hidden">
+                    <div class="form-group">
+                        <label for="newCustomerName">שם הלקוח</label>
+                        <input type="text" id="newCustomerName" placeholder="Israir Airlines">
+                    </div>
+                    <div class="form-group">
+                        <label for="newCustomerRep">איש קשר</label>
+                        <input type="text" id="newCustomerRep" placeholder="Noa Ben-David">
+                    </div>
+                    <div class="form-group">
+                        <label for="newCustomerEmail">אימייל</label>
+                        <input type="text" id="newCustomerEmail" placeholder="ops@israir.co.il">
+                    </div>
+                    <div class="form-group">
+                        <label for="newCustomerAddress">כתובת</label>
+                        <input type="text" id="newCustomerAddress" placeholder="Ben-Gurion Airport, Israel">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="newVisitHangar">עמדת האנגר</label>
+                        <select id="newVisitHangar">
+                            <option value="">טוען עמדות...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newVisitTargetDate">יעד יציאה משוער</label>
+                        <input type="datetime-local" id="newVisitTargetDate">
+                    </div>
+                </div>
+
+                <div class="form-actions" style="display:flex; gap:0.75rem;">
+                    <button type="submit" class="btn btn-primary">פתח ביקור</button>
+                    <button type="button" class="btn btn-outline" onclick="closeNewVisitPanel()">ביטול</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- פאנל עריכה - מוסתר כברירת מחדל, נפתח בלחיצה על שורה -->
+        <section id="visitEditPanel" class="visit-edit-panel hidden">
+            <div class="visit-edit-header">
+                <h2 id="visitEditTitle">עריכת ביקור</h2>
+                <button type="button" class="visit-edit-close" onclick="closeVisitEditPanel()">&times;</button>
+            </div>
+
+            <!-- פרטי ביקור לקריאה בלבד -->
+            <div id="visitInfoBlock" class="visit-info-block"></div>
+
+            <form id="visitEditForm">
+                <input type="hidden" id="editingVisitId">
+                <div class="form-group">
+                    <label for="editTargetLeaveDate">יעד יציאה משוער</label>
+                    <input type="datetime-local" id="editTargetLeaveDate">
+                </div>
+                <div class="form-actions" style="display:flex; gap:0.75rem;">
+                    <button type="submit" class="btn btn-primary">שמור יעד יציאה</button>
+                    <button type="button" class="btn btn-outline" onclick="closeVisitEditPanel()">ביטול</button>
+                </div>
+            </form>
+
+            <div class="perforation" style="margin: 1.5rem 0;"></div>
+
+            <div class="visit-signoff-section">
+                <h3>סגירת ביקור</h3>
+                <div id="visitSignoffStatus" class="signoff-status"></div>
+                <div id="actualLeaveDateWrap" class="form-group hidden" style="max-width:280px;">
+                    <label for="actualLeaveDateInput">תאריך יציאה בפועל</label>
+                    <input type="datetime-local" id="actualLeaveDateInput">
+                </div>
+                <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                    <button type="button" id="signVisitBtn" class="btn btn-secondary" onclick="handleSignVisit()">✍️ חתום על סגירת הביקור</button>
+                    <button type="button" id="rejectVisitBtn" class="btn btn-outline hidden" onclick="handleRejectVisit()">↩️ ראיתי בעיה - החזר לפעיל</button>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="table-container" style="margin-top:1.75rem;">
+            <table id="visitsTable">
+                <thead>
+                    <tr>
+                        <th>מס' ביקור</th>
+                        <th>זנב</th>
+                        <th>לקוח</th>
+                        <th>מיקום במגדל</th>
+                        <th>כניסה</th>
+                        <th>יעד יציאה</th>
+                        <th>יציאה בפועל</th>
+                        <th>סטטוס</th>
+                    </tr>
+                </thead>
+                <tbody id="visitsTableBody">
+                    <tr><td colspan="8" class="placeholder-text" style="text-align:center;">טוען ביקורים...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<script src="../js/authGuard.js"></script>
+<script src="../js/manage_visits.js"></script>
+</body>
+</html>

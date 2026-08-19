@@ -1,0 +1,19 @@
+/* =========================================================
+   MRO Planner — Change Log page (בונה על גבי theme.css)
+   ========================================================= */
+
+#logTable { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem; }
+#logTable th, #logTable td { padding: 0.85rem 1rem; border-bottom: 1px dashed var(--line-soft); }
+#logTable th {
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.74rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+#logTable tbody tr:hover { background: var(--brand-blue-light); }
+#logTable .log-old { color: #dc2626; text-decoration: line-through; }
+#logTable .log-new { color: #15803d; font-weight: 600; }
