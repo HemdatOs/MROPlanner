@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        const [users] = await db.query('SELECT * FROM Users WHERE EmployeeId = ?', [employeeId]);
+        const [users] = await db.query('SELECT * FROM users WHERE EmployeeId = ?', [employeeId]);
         
         if (users.length === 0) {
             return res.status(401).json({ error: 'מספר עובד או סיסמה שגויים' });
@@ -96,7 +96,7 @@ router.post('/reset-password', async (req, res) => {
     }
 
     try {
-        const [users] = await db.query('SELECT * FROM Users WHERE EmployeeId = ?', [employeeId]);
+        const [users] = await db.query('SELECT * FROM users WHERE EmployeeId = ?', [employeeId]);
         if (users.length === 0) {
             return res.status(400).json({ error: 'פרטי האימות שגויים' });
         }
@@ -119,7 +119,7 @@ router.post('/reset-password', async (req, res) => {
 
         // עדכון הסיסמה, איפוס התאריך להיום, וכיבוי דגל הסיסמה הזמנית (אם היה דלוק)
         await db.query(
-            'UPDATE Users SET PasswordHash = ?, LastPasswordChangeDate = NOW(), MustChangePassword = 0 WHERE EmployeeId = ?',
+            'UPDATE users SET PasswordHash = ?, LastPasswordChangeDate = NOW(), MustChangePassword = 0 WHERE EmployeeId = ?',
             [newHash, employeeId]
         );
 

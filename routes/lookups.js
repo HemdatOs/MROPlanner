@@ -20,7 +20,7 @@ router.get('/lookup', requireAuth, async (req, res) => {
     try {
         // 1. חומרה
         try {
-            const [rows] = await db.query('SELECT SeverityId AS id, SeverityName AS name FROM IssueSeverity');
+            const [rows] = await db.query('SELECT SeverityId AS id, SeverityName AS name FROM issueseverity');
             data.severities = rows;
         } catch (err) {
             console.error('❌ שגיאה בטעינת טבלת IssueSeverity:', err.message);
@@ -28,7 +28,7 @@ router.get('/lookup', requireAuth, async (req, res) => {
 
         // 2. סטטוסים
         try {
-            const [rows] = await db.query('SELECT StatusID AS id, StatusName AS name FROM IssueStatus');
+            const [rows] = await db.query('SELECT StatusID AS id, StatusName AS name FROM issuestatus');
             data.statuses = rows;
         } catch (err) {
             console.error('❌ שגיאה בטעינת טבלת IssueStatus:', err.message);
@@ -36,7 +36,7 @@ router.get('/lookup', requireAuth, async (req, res) => {
 
         // 3. דחיפות
         try {
-            const [rows] = await db.query('SELECT PriorityId AS id, PriorityName AS name FROM IssuePriority');
+            const [rows] = await db.query('SELECT PriorityId AS id, PriorityName AS name FROM issuepriority');
             data.priorities = rows;
         } catch (err) {
             console.error('❌ שגיאה בטעינת טבלת IssuePriority:', err.message);
@@ -52,7 +52,7 @@ router.get('/lookup', requireAuth, async (req, res) => {
 
         // 5. מחלקות
         try {
-            const [rows] = await db.query('SELECT DepartmentCode AS id, DepartmentName AS name, Description AS description FROM Department');
+           const [rows] = await db.query('SELECT DepartmentCode AS id, DepartmentName AS name, Description AS description FROM department');
             data.departments = rows;
         } catch (err) {
             console.error('❌ שגיאה בטעינת טבלת Department:', err.message);
@@ -88,7 +88,7 @@ router.get('/lookup', requireAuth, async (req, res) => {
 
         // 6. משתמשים (מתוקן לפי UserName ו-UserLastName!)
         try {
-            const [rows] = await db.query('SELECT UserId AS id, CONCAT(UserName, " ", UserLastName) AS name, PermissionCode FROM Users');
+            const [rows] = await db.query('SELECT UserId AS id, CONCAT(UserName, " ", UserLastName) AS name, PermissionCode FROM users');
             data.users = rows;
         } catch (err) {
             console.error('❌ שגיאה בטעינת טבלת Users:', err.message);
@@ -122,9 +122,9 @@ router.get('/visit/:visitId', async (req, res) => {
                 p.PriorityId,
                 (SELECT COUNT(*) FROM maintenanceaction a WHERE a.IssueNumber = i.IssueNumber) AS ActionsCount
             FROM maintenanceissue i
-            LEFT JOIN IssueStatus s ON i.StatusID = s.StatusID
-            LEFT JOIN IssueSeverity sev ON i.SeverityId = sev.SeverityId
-            LEFT JOIN IssuePriority p ON i.PriorityId = p.PriorityId
+           LEFT JOIN issuestatus s ON i.StatusID = s.StatusID
+            LEFT JOIN issueseverity sev ON i.SeverityId = sev.SeverityId
+            LEFT JOIN issuepriority p ON i.PriorityId = p.PriorityId
             WHERE i.VisitId = ?
             ORDER BY i.IssueNumber DESC
         `;
