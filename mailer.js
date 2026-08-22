@@ -16,7 +16,7 @@ async function sendEmail(to, subject, html) {
 
     try {
         const { data, error } = await resend.emails.send({
-            from: process.env.RESEND_FROM_EMAIL || 'MRO Planner <mroplanner030@gmail.com>',
+            from: process.env.RESEND_FROM_EMAIL || 'MRO Planner <onboarding@resend.dev>',
             to,
             subject,
             html
