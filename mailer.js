@@ -11,9 +11,9 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    family: 4  // 👈 שורה חדשה - מכריח IPv4 בלבד, פותר את בעיית ENETUNREACH ב-Railway
 });
-
 // שולחת מייל בודד. לא זורקת שגיאה החוצה - אם השליחה נכשלת (למשל אין אינטרנט, פרטי
 // ההתחברות שגויים), רק רושמת ללוג ומחזירה false, כדי שכשל בשליחת מייל לא יפיל
 // שום פעולה אחרת במערכת (כמו יצירת/עדכון תקלה) שמתבצעת יחד עם ההתראה.
