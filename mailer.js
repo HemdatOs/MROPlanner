@@ -1,32 +1,37 @@
 // mailer.js
-// שולח מיילים דרך Resend API (HTTPS, פורט 443) במקום SMTP -
-// כי Railway חוסם תעבורה יוצאת בפורטים של SMTP (465/587/25).
-// דורש: npm install resend
-// דורש משתנה סביבה RESEND_API_KEY ב-Railway (Variables)
+// ⚠️ קובץ חדש - שים בתיקיית השורש של הפרויקט (ליד server.js, db.js)
+// דורש: npm install nodemailer
+//
 
-const { Resend } = require('resend');
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');  // 👈 חדש - חייב לרוץ לפני יצירת ה-transporter
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const nodemailer = require('nodemailer');
 
-// שולחת מייל בודד. לא זורקת שגיאה החוצה - אם השליחה נכשלת, רק רושמת ללוג
-// ומחזירה false, כדי שכשל בשליחת מייל לא יפיל שום פעולה אחרת במערכת
-// (כמו יצירת/עדכון תקלה) שמתבצעת יחד עם ההתראה.
+const transporter = nodemailer.createTransport({
+    host: 'mroplanner030.gmail.com',   // 👈 שונה מ-service:'gmail' לקונפיגורציה מפורשת
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    family: 4   // 👈 חדש - כפיית IPv4 ברמת החיבור עצמו
+});
+
+// שולחת מייל בודד. לא זורקת שגיאה החוצה - אם השליחה נכשלת (למשל אין אינטרנט, פרטי
+// ההתחברות שגויים), רק רושמת ללוג ומחזירה false, כדי שכשל בשליחת מייל לא יפיל
+// שום פעולה אחרת במערכת (כמו יצירת/עדכון תקלה) שמתבצעת יחד עם ההתראה.
 async function sendEmail(to, subject, html) {
     if (!to) return false;
 
     try {
-        const { data, error } = await resend.emails.send({
-            from: process.env.RESEND_FROM_EMAIL || 'MRO Planner <onboarding@resend.dev>',
+        await transporter.sendMail({
+            from: `"MRO Planner" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             html
         });
-
-        if (error) {
-            console.error('שגיאה בשליחת מייל:', error.message || error);
-            return false;
-        }
-
         return true;
     } catch (error) {
         console.error('שגיאה בשליחת מייל:', error.message);
