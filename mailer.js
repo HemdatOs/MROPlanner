@@ -3,17 +3,22 @@
 // דורש: npm install nodemailer
 //
 
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');  // 👈 חדש - חייב לרוץ לפני יצירת ה-transporter
 
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',   // 👈 שונה מ-service:'gmail' לקונפיגורציה מפורשת
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    family: 4  // 👈 שורה חדשה - מכריח IPv4 בלבד, פותר את בעיית ENETUNREACH ב-Railway
+    family: 4   // 👈 חדש - כפיית IPv4 ברמת החיבור עצמו
 });
+
 // שולחת מייל בודד. לא זורקת שגיאה החוצה - אם השליחה נכשלת (למשל אין אינטרנט, פרטי
 // ההתחברות שגויים), רק רושמת ללוג ומחזירה false, כדי שכשל בשליחת מייל לא יפיל
 // שום פעולה אחרת במערכת (כמו יצירת/עדכון תקלה) שמתבצעת יחד עם ההתראה.
