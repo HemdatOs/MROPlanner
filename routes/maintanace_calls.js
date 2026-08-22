@@ -32,7 +32,7 @@ const [users] = await db.query(`
         UserId AS userId,
         EmployeeId AS employeeId,
         CONCAT(EmployeeId, ' - ', UserName, ' ', UserLastName) AS displayName
-    FROM Users
+    FROM users
 `);
         // החזרת המידע המלא כאובייקט JSON ל-Frontend
         res.json({
@@ -172,7 +172,7 @@ router.get('/departments/:deptCode/users', requireAuth, async (req, res) => {
     const [deptRows] = await db.execute(
       `SELECT u.UserId AS managerUserId, u.EmployeeId AS managerEmployeeId 
        FROM department d
-       LEFT JOIN USERS u ON d.ManagerId = u.UserId 
+       LEFT JOIN users u ON d.ManagerId = u.UserId 
        WHERE d.DepartmentCode = ?`,
       [deptCode]
     );
@@ -183,7 +183,7 @@ router.get('/departments/:deptCode/users', requireAuth, async (req, res) => {
     // 2. שליפת כל העובדים - כולל UserId המבוקש ב-DB!
     const [users] = await db.execute(
       `SELECT UserId, EmployeeId, UserName, UserLastName 
-       FROM USERS 
+       FROM users 
        WHERE DepartmentCode = ? 
        ORDER BY UserName ASC`,
       [deptCode]
@@ -210,7 +210,7 @@ try {
                 UserName,
                 UserLastName,
                 CONCAT(UserName, ' ', UserLastName) AS EmployeeName
-            FROM USERS
+            FROM users
             WHERE EmployeeId IS NOT NULL 
         `);
 
