@@ -9,7 +9,7 @@ dns.setDefaultResultOrder('ipv4first');  // 👈 חדש - חייב לרוץ לפ
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',   // 👈 שונה מ-service:'gmail' לקונפיגורציה מפורשת
+    host: 'mroplanner030.gmail.com',   // 👈 שונה מ-service:'gmail' לקונפיגורציה מפורשת
     port: 465,
     secure: true,
     auth: {
