@@ -1,40 +1,43 @@
 // mailer.js
-// ⚠️ קובץ חדש - שים בתיקיית השורש של הפרויקט (ליד server.js, db.js)
-// דורש: npm install nodemailer
-//
+// שולח מיילים דרך Brevo API (HTTPS, פורט 443) במקום SMTP -
+// כי Railway חוסם תעבורה יוצאת בפורטים של SMTP (465/587/25).
+// דורש: npm install axios (אם עוד אין בפרויקט)
+// דורש משתני סביבה ב-Railway (Variables):
+//   BREVO_API_KEY   - המפתח מ-Brevo (SMTP & API -> API Keys)
+//   EMAIL_USER      - כתובת ה-Gmail שאימתת כ-Sender ב-Brevo
 
-const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first');  // 👈 חדש - חייב לרוץ לפני יצירת ה-transporter
+const axios = require('axios');
 
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    host: 'mroplanner030.gmail.com',   // 👈 שונה מ-service:'gmail' לקונפיגורציה מפורשת
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    family: 4   // 👈 חדש - כפיית IPv4 ברמת החיבור עצמו
-});
-
-// שולחת מייל בודד. לא זורקת שגיאה החוצה - אם השליחה נכשלת (למשל אין אינטרנט, פרטי
-// ההתחברות שגויים), רק רושמת ללוג ומחזירה false, כדי שכשל בשליחת מייל לא יפיל
-// שום פעולה אחרת במערכת (כמו יצירת/עדכון תקלה) שמתבצעת יחד עם ההתראה.
+// שולחת מייל בודד. לא זורקת שגיאה החוצה - אם השליחה נכשלת, רק רושמת ללוג
+// ומחזירה false, כדי שכשל בשליחת מייל לא יפיל שום פעולה אחרת במערכת
+// (כמו יצירת/עדכון תקלה) שמתבצעת יחד עם ההתראה.
 async function sendEmail(to, subject, html) {
     if (!to) return false;
 
     try {
-        await transporter.sendMail({
-            from: `"MRO Planner" <${process.env.EMAIL_USER}>`,
-            to,
-            subject,
-            html
-        });
+        await axios.post(
+            'https://api.brevo.com/v3/smtp/email',
+            {
+                sender: {
+                    name: 'MRO Planner',
+                    email: process.env.EMAIL_USER
+                },
+                to: [{ email: to }],
+                subject,
+                htmlContent: html
+            },
+            {
+                headers: {
+                    'api-key': process.env.BREVO_API_KEY,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }
+        );
         return true;
     } catch (error) {
-        console.error('שגיאה בשליחת מייל:', error.message);
+        const details = error.response ? JSON.stringify(error.response.data) : error.message;
+        console.error('שגיאה בשליחת מייל:', details);
         return false;
     }
 }
